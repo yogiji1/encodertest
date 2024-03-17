@@ -71,22 +71,6 @@ async def encode(event, msg, scale=0):
         if 426 == wdt:
             os.rmdir("encodemedia")
             return await edit.edit(f"The video is already in {scale}p resolution.")
-    if scale == 360:
-        if 640 == wdt:
-            os.rmdir("encodemedia")
-            return await edit.edit(f"The video is already in {scale}p resolution.")
-    if scale == 480:
-        if 854 == wdt:
-            os.rmdir("encodemedia")
-            return await edit.edit(f"The video is already in {scale}p resolution.")
-    if scale == 720:
-        if 1280 == wdt:
-            os.rmdir("encodemedia")
-            return await edit.edit(f"The video is already in {scale}p resolution.")
-    if scale == 1080:
-        if 1920 == wdt:
-            os.rmdir("encodemedia")
-            return await edit.edit(f"The video is already in {scale}p resolution.")
     FT = time.time()
     progress = f"progress-{FT}.txt"
     cmd = ''
@@ -95,14 +79,10 @@ async def encode(event, msg, scale=0):
     elif scale == 360:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 640x360 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
     elif scale == 480:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 854x480 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset medium -s 854x480 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
     elif scale == 720:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 1280x720 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
-    elif scale == 1080:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx265 -pix_fmt yuv420p10le -preset medium -s 1280x720 -crf 23 -metadata title='[Bhupinder Jogi Encode]' -metadata:s:v title='[Bhupinder Jogi Encode] - 720p - HEVC ' -metadata:s:a title='[Bhupinder Jogi] - Opus - 256 kbps' -metadata:s:s title='[Bhupinder Jogi]' -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
-    elif scale == 2160:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset medium -s 1280x720 -crf 23 -metadata title='[Bhupinder Jogi Encode]' -metadata:s:v title='[Bhupinder Jogi Encode] - 720p - HEVC ' -metadata:s:a title='[Bhupinder Jogi] - Opus - 256 kbps' -metadata:s:s title='[Bhupinder Jogi]' -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
-    try:
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx265 -pix_fmt yuv420p10le -preset medium -s 1280x720 -crf 23 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        try:
         await ffmpeg_progress(cmd, name, progress, FT, edit, '**ENCODING:**')
     except Exception as e:
         os.rmdir("encodemedia")
